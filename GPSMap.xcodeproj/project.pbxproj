@@ -56,15 +56,31 @@
 		175862EE2026871100071AD8 /* GPSMap */ = {
 			isa = PBXGroup;
 			children = (
+				1758630820269A1E00071AD8 /* Controllers */,
+				17586307202699FC00071AD8 /* Models */,
 				175862EF2026871100071AD8 /* AppDelegate.swift */,
 				175863012026890600071AD8 /* MapViewController.swift */,
 				175862F62026871100071AD8 /* Assets.xcassets */,
 				175862F82026871100071AD8 /* LaunchScreen.storyboard */,
 				175862FB2026871100071AD8 /* Info.plist */,
-				17586303202691F000071AD8 /* LocationModel.swift */,
-				17586305202694B400071AD8 /* NetworkManager.swift */,
 			);
 			path = GPSMap;
+			sourceTree = "<group>";
+		};
+		17586307202699FC00071AD8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				17586303202691F000071AD8 /* LocationModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1758630820269A1E00071AD8 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				17586305202694B400071AD8 /* NetworkManager.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
