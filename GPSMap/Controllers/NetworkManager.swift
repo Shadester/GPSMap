@@ -8,8 +8,12 @@
 
 import Foundation
 
-class NetworkManager {
-    func submitLocation(location: Location, completion:((Error?) -> Void)?) {
+final class NetworkManager {
+    
+    static let sharedInstance = NetworkManager()
+    private init() {}
+    
+    func submitLocation(location: [Location], completion:((Error?) -> Void)?) {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "jsonplaceholder.typicode.com"
@@ -27,6 +31,8 @@ class NetworkManager {
         
         // Now let's encode out Post struct into JSON data...
         let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        
         do {
             let jsonData = try encoder.encode(location)
             // ... and set our request's HTTP body
@@ -40,7 +46,9 @@ class NetworkManager {
         let config = URLSessionConfiguration.default
         let session = URLSession(configuration: config)
         let task = session.dataTask(with: request) { (responseData, response, responseError) in
-            guard responseError == nil else {
+            if responseError == nil {
+                completion?(nil)
+            } else {
                 completion?(responseError!)
                 return
             }

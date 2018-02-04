@@ -13,7 +13,8 @@ import CoreLocation
 class MapViewController: UIViewController {
 
     private var locationManager: CLLocationManager!
-    private var currentLocation: CLLocation?
+    
+    var locationsBuffer: [Location] = []
     
     let mapView: MKMapView = {
         let m = MKMapView()
@@ -21,6 +22,7 @@ class MapViewController: UIViewController {
         m.mapType = MKMapType.standard
         m.isZoomEnabled = true
         m.isScrollEnabled = true
+        m.showsUserLocation = true
         return m
     }()
     
@@ -38,6 +40,7 @@ class MapViewController: UIViewController {
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.distanceFilter = 100
         locationManager.requestWhenInUseAuthorization()
         
         // Check for Location Services
@@ -55,20 +58,24 @@ class MapViewController: UIViewController {
 }
 
 extension MapViewController: CLLocationManagerDelegate {
-    
+
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let userLocation = locations.last {
             let viewRegion = MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 2000, 2000)
             mapView.setRegion(viewRegion, animated: false)
-            
-            let myAnnotation: MKPointAnnotation = MKPointAnnotation()
-            myAnnotation.coordinate = CLLocationCoordinate2DMake(userLocation.coordinate.latitude, userLocation.coordinate.longitude);
-            myAnnotation.title = "Current location"
-            mapView.addAnnotation(myAnnotation)
-            
+    
             let location = Location(timeStamp: Date(), latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
-            let networkManager = NetworkManager()
-            networkManager.submitLocation(location: location, completion: nil)
+            
+            locationsBuffer.append(location)
+            if locationsBuffer.count > 10 {
+                NetworkManager.sharedInstance.submitLocation(location: locationsBuffer) { (error) in
+                    if let error = error {
+                        fatalError(error.localizedDescription)
+                    } else {
+                        self.locationsBuffer.removeAll()
+                    }
+                }
+            }
         }
     }
 }
