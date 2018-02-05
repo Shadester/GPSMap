@@ -44,10 +44,10 @@ class MapViewController: UIViewController {
         locationManager.requestWhenInUseAuthorization()
         
         // Check for Location Services
-        
         if CLLocationManager.locationServicesEnabled() {
-            locationManager.requestWhenInUseAuthorization()
-            locationManager.startUpdatingLocation()
+            if (CLLocationManager.authorizationStatus() == .authorizedWhenInUse) {
+                locationManager.startUpdatingLocation()
+            }
         }
     }
     

@@ -14,14 +14,9 @@ final class NetworkManager {
     private init() {}
     
     func submitLocation(location: [Location], completion:((Error?) -> Void)?) {
-        var urlComponents = URLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = "jsonplaceholder.typicode.com"
-        urlComponents.path = "/posts"
-        guard let url = urlComponents.url else { fatalError("Could not create URL from components") }
         
         // Specify this request as being a POST method
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: URL(string: "https://jsonplaceholder.typicode.com/posts")!)
         request.httpMethod = "POST"
         // Make sure that we include headers specifying that our request's HTTP body
         // will be JSON encoded
@@ -43,9 +38,7 @@ final class NetworkManager {
         }
         
         // Create and run a URLSession data task with our JSON encoded POST request
-        let config = URLSessionConfiguration.default
-        let session = URLSession(configuration: config)
-        let task = session.dataTask(with: request) { (responseData, response, responseError) in
+        let task = URLSession.shared.dataTask(with: request) { (responseData, response, responseError) in
             if responseError == nil {
                 completion?(nil)
             } else {
