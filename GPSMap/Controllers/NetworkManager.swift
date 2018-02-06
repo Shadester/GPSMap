@@ -8,12 +8,9 @@
 
 import Foundation
 
-final class NetworkManager {
+struct NetworkManager {
     
-    static let sharedInstance = NetworkManager()
-    private init() {}
-    
-    func submitLocation(location: [Location], completion:((Error?) -> Void)?) {
+    static func submitLocation(location: [Location], completion:((Error?) -> Void)?) {
         
         // Specify this request as being a POST method
         var request = URLRequest(url: URL(string: "https://jsonplaceholder.typicode.com/posts")!)

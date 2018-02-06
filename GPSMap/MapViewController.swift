@@ -68,7 +68,7 @@ extension MapViewController: CLLocationManagerDelegate {
             
             locationsBuffer.append(location)
             if locationsBuffer.count > 10 {
-                NetworkManager.sharedInstance.submitLocation(location: locationsBuffer) { (error) in
+                NetworkManager.submitLocation(location: locationsBuffer) { (error) in
                     if let error = error {
                         fatalError(error.localizedDescription)
                     } else {
